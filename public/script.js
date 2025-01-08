@@ -24,7 +24,7 @@ function updateResults() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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', // Use your actual OpenAI API key here
+            'Authorization': 'Add your own api key here',
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
@@ -81,7 +81,7 @@ function updateResults() {
       fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(noun2)}&per_page=1`, {
         method: 'GET',
         headers: {
-          'Authorization': 'Rj8tpmFQQJqjdAmslTs1dcaj8q0xxz1lYDsya0J6hNAvO8ooCpABJ2rH',
+          'Authorization': 'Add your own api key here',
         },
       })
         .then(response => response.json())
