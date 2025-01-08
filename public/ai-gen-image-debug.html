@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Would Win?</title>
+<link rel="stylesheet" href="styles.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <ul>
+        <li><a class="active" href="index.html">!This or That!</a></li>
+        <li><a href="ai-gen-image-debug.html">The brains behind(AI test)</a></li>
+        <li><a href="about.html">About Me</a></li>
+        <li><a href="404.html">404 page(looks really cool)</a></li>
+      </ul>
+<header>
+    <div id="bannerimage">
+        <div id="bannertextall">
+        <h1 id="bannertext">!This or That!</h1>
+        <h3 id="bannertextdescription">!?Who Would Win?!</h3>
+    </div>
+    </div>
+</header>
+
+<main>
+    <h1>Random Image Based on Your Prompt</h1>
+    <br>
+
+    <input type="text" id="prompt-input" placeholder="Enter your prompt" />
+    <button onclick="fetchImageFromPrompt()">Get Image</button>
+
+    <br><br>
+
+    <!-- loading gif -->
+    <div id="loading-container">
+        <img id="spinner" src="spinner.gif" alt="Loading..." style="display: none;">
+        <img id="random-image" alt="Generated image" width="300" style="display: none;">
+    </div>
+</main>
+
+<footer>
+    <p>Made with ❤️ by Atharv Sharma</p>
+</footer>
+
+<script src="script.js"></script>
+<script>
+    function fetchImageFromPrompt() {
+        const prompt = document.getElementById('prompt-input').value;
+        if (!prompt) {
+            alert("Please enter a prompt!");
+            return;
+        }
+
+        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('random-image').style.display = 'none';
+
+        // pexels
+        fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(prompt)}&per_page=1`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Rj8tpmFQQJqjdAmslTs1dcaj8q0xxz1lYDsya0J6hNAvO8ooCpABJ2rH',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.photos && data.photos.length > 0) {
+                    const imageUrl = data.photos[0].src.original;
+                    const imageElement = document.getElementById('random-image');
+                    imageElement.src = imageUrl;
+
+                    // lodang spinner hidden
+                    imageElement.onload = () => {
+                        document.getElementById('spinner').style.display = 'none';
+                        imageElement.style.display = 'block';
+                    };
+                } else {
+                    alert("No images found for your prompt.");
+                    document.getElementById('spinner').style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching image:', error);
+                document.getElementById('spinner').style.display = 'none';
+            });
+    }
+</script>
+
+</body>
+</html>
+
+<style>
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+input, button {
+    margin: 10px;
+    padding: 10px;
+    font-size: 1.2em;
+}
+
+#random-image, #spinner {
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+</style>
